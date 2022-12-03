@@ -15,14 +15,10 @@ def frame_getter(feed):
 
 if __name__ == "__main__":
 	from get_cam import get_feed, show_feed
-
-
-	feed = get_feed()
-	#show_feed(feed)
-
 	from flask import Flask
 	from flask import Response
 
+	feed = get_feed()
 	app = Flask(__name__)
 
 	@app.route("/live")
