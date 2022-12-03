@@ -25,5 +25,5 @@ def show_feed(feed, title="Title", ):
 	cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-	feed = get_feed()
+	feed = get_feed(ip="192.168.59.242")
 	show_feed(feed)
