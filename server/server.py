@@ -19,3 +19,6 @@ def get_post_data():
 	jsdata = dict(json.loads(rcv_data))
 	print(jsdata["bom"])
 	return "200"
+
+if __name__ == "__main__":
+	app.run(host="0.0.0.0")
