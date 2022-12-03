@@ -3,28 +3,27 @@
 
 import cv2
 
+def get_feed(username ="eleczoo", password="69eleczoo69", ip="10.177.243.195", port="8080"):
+	"""
+	Get the video feed
+	args: 
+		Authentication stuff
+		- username
+		- password
+		- ip
+		- port
+	"""
+	return cv2.VideoCapture(f"http://{username}:{password}@{ip}:{port}/video")
 
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-	username = "eleczoo"
-	password = "69eleczoo69"
-	ip = "10.177.243.195"
-	port = "8080"
-
-	feed = f"http://{username}:{password}@{ip}:{port}/video"
-	capture = cv2.VideoCapture(feed)
+def show_feed(feed, title="Title", ):
 	while(True):
-		ret, frame = capture.read()
-		cv2.imshow("Phone Camera", frame)   
+		ret, frame = feed.read()
+		cv2.imshow(f"{title}", frame)   
 		if cv2.waitKey(1) == ord("q"):
 			break
-
-	capture.release()
+	feed.release()
 	cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+	feed = get_feed()
+	show_feed(feed)
