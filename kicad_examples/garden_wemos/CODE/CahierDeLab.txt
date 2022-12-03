@@ -1,0 +1,36 @@
+
+~----- RASPBERRY PI -----~
+	#----- Installation de mosquitto (broker MQTT) -----#
+	//update
+	sudo apt-get update
+	sudo apt-get upgrade
+
+	//install
+	sudo apt-get install mosquitto
+	sudo apt-get install mosquitto-clients
+
+	#----- Test du broker en local -----#
+	//besoin de deux terminaux
+
+		*----- terminal 1 -----*
+		//subscribe to a topic (-host -topic)
+		$mosquitto_sub -h {IP Broker} -t dossier/topicTest 
+		
+		*----- terminal 2 -----*
+		//Publish to the topic (-host -topic -message)
+		$mosquitto_pub -h {IP Broker} -t dossier/topicTest -m "message de test"
+
+~----- ESP8266 (Wemos D1 mini) -----~
+	#----- Installer Micropython -----#
+	pip install esptool // as admin
+	esptool.py --port COMx erase_flash
+	esptool.py --port COMx --baud 460800 write_flash --flash_size=detect 0 esp8266-x7.bin
+
+	#----- Utilisation MQTT -----#
+	Systeme de Publish et Sub à un topic
+	capteur1 pub ---->>>> broker <<<<----- sub capteur1
+	capteur1 pub ---->>>> broker <<<<----- sub capteur1
+	capteur1 pub ---->>>> broker <<<<----- sub capteur1
+
+
+	

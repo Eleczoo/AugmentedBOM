@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name F38C_U2S-rescue)(type Legacy)(uri ${KIPRJMOD}/F38C_U2S-rescue.lib)(options "")(descr ""))
-)

@@ -1,0 +1,455 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "Garden Wemos"
+Date "2019-05-19"
+Rev "1.0"
+Comp "ThePurpleCompagny"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L wemos_mini:WeMos_mini U3
+U 1 1 5CE19146
+P 6500 4000
+F 0 "U3" H 6500 4625 60  0000 C CNN
+F 1 "WeMos_mini" H 6525 4525 60  0000 C CNN
+F 2 "Module:WEMOS_D1_mini_light" H 7050 3300 60  0001 C CNN
+F 3 "http://www.wemos.cc/Products/d1_mini.html" H 6500 4531 60  0001 C CNN
+	1    6500 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L 4xxx:4051 U4
+U 1 1 5CE1A1EC
+P 9325 4525
+F 0 "U4" H 9675 4575 50  0000 L CNN
+F 1 "4051" H 9650 4500 50  0000 L CNN
+F 2 "Package_DIP:DIP-16_W7.62mm_Socket_LongPads" H 9325 4525 50  0001 C CNN
+F 3 "http://www.intersil.com/content/dam/Intersil/documents/cd40/cd4051bms-52bms-53bms.pdf" H 9325 4525 50  0001 C CNN
+	1    9325 4525
+	1    0    0    -1  
+$EndComp
+$Comp
+L My_symbols:MoistSensor U2
+U 1 1 5CE220CB
+P 3550 3425
+F 0 "U2" H 3108 3550 50  0000 C CNN
+F 1 "MoistSensor" H 3108 3459 50  0000 C CNN
+F 2 "Connectorss:Fan_Pin_Header_Straight_1x03" H 3550 3425 50  0001 C CNN
+F 3 "" H 3550 3425 50  0001 C CNN
+	1    3550 3425
+	1    0    0    -1  
+$EndComp
+$Comp
+L SYMBOLES_LIB:PHOTO.R R1
+U 1 1 5CE231BE
+P 3125 1950
+F 0 "R1" V 3072 2106 60  0000 L CNN
+F 1 "PHOTO.R" V 3178 2106 60  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Vertical" V 3125 1950 60  0001 C CNN
+F 3 "" V 3125 1950 60  0001 C CNN
+	1    3125 1950
+	0    1    1    0   
+$EndComp
+$Comp
+L gardenWemos-rescue:R-device R2
+U 1 1 5CE24388
+P 3125 2550
+F 0 "R2" H 3195 2596 50  0000 L CNN
+F 1 "10k" H 3195 2505 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3055 2550 50  0001 C CNN
+F 3 "" H 3125 2550 50  0001 C CNN
+	1    3125 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L gardenWemos-rescue:DHT11-sensors U1
+U 1 1 5CE256F1
+P 3125 5400
+F 0 "U1" V 2760 5400 50  0000 C CNN
+F 1 "DHT11" V 2851 5400 50  0000 C CNN
+F 2 "Sensor:Aosong_DHT11_5.5x12.0_P2.54mm" H 3275 5650 50  0001 C CNN
+F 3 "http://akizukidenshi.com/download/ds/aosong/DHT11.pdf" H 3275 5650 50  0001 C CNN
+	1    3125 5400
+	0    1    1    0   
+$EndComp
+$Comp
+L gardenWemos-rescue:R-device R3
+U 1 1 5CE26F9F
+P 3625 5550
+F 0 "R3" H 3695 5596 50  0000 L CNN
+F 1 "10k" H 3695 5505 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3555 5550 50  0001 C CNN
+F 3 "" H 3625 5550 50  0001 C CNN
+	1    3625 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L gardenWemos-rescue:C-device C1
+U 1 1 5CE273F8
+P 3125 4850
+F 0 "C1" V 2873 4850 50  0000 C CNN
+F 1 "1u" V 2964 4850 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3163 4700 50  0001 C CNN
+F 3 "" H 3125 4850 50  0001 C CNN
+	1    3125 4850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3425 5300 3625 5300
+Wire Wire Line
+	3625 5300 3625 5400
+Wire Wire Line
+	3125 5700 3125 5775
+Wire Wire Line
+	3125 5775 3625 5775
+Wire Wire Line
+	3625 5775 3625 5700
+Wire Wire Line
+	3275 4850 3625 4850
+Wire Wire Line
+	3625 4850 3625 5300
+Connection ~ 3625 5300
+Wire Wire Line
+	2975 4850 2600 4850
+Wire Wire Line
+	2600 4850 2600 5300
+Wire Wire Line
+	2600 5300 2825 5300
+$Comp
+L gardenWemos-rescue:GND-power #PWR0101
+U 1 1 5CE2F994
+P 5200 3900
+F 0 "#PWR0101" H 5200 3650 50  0001 C CNN
+F 1 "GND" H 5205 3727 50  0000 C CNN
+F 2 "" H 5200 3900 50  0001 C CNN
+F 3 "" H 5200 3900 50  0001 C CNN
+	1    5200 3900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 3650 6000 3650
+$Comp
+L gardenWemos-rescue:+5V-power #PWR0102
+U 1 1 5CE2FE91
+P 5200 3500
+F 0 "#PWR0102" H 5200 3350 50  0001 C CNN
+F 1 "+5V" H 5215 3673 50  0000 C CNN
+F 2 "" H 5200 3500 50  0001 C CNN
+F 3 "" H 5200 3500 50  0001 C CNN
+	1    5200 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5200 3650 5200 3500
+Wire Wire Line
+	6000 3750 5200 3750
+Wire Wire Line
+	5200 3750 5200 3900
+Text Label 5900 3650 2    50   ~ 0
++5V
+Text Label 5900 3750 2    50   ~ 0
+GND
+Text Label 3250 5775 0    50   ~ 0
+IO_DHT
+Wire Wire Line
+	3750 3725 3875 3725
+Wire Wire Line
+	3750 3625 3875 3625
+Wire Wire Line
+	3750 3525 3875 3525
+Text Label 3875 3625 0    50   ~ 0
++5V
+Text Label 3875 3525 0    50   ~ 0
+GND
+Text Label 8700 3925 2    50   ~ 0
+Moisture1
+$Comp
+L gardenWemos-rescue:GND-power #PWR0103
+U 1 1 5CE3B6F2
+P 3125 2825
+F 0 "#PWR0103" H 3125 2575 50  0001 C CNN
+F 1 "GND" H 3130 2652 50  0000 C CNN
+F 2 "" H 3125 2825 50  0001 C CNN
+F 3 "" H 3125 2825 50  0001 C CNN
+	1    3125 2825
+	1    0    0    -1  
+$EndComp
+$Comp
+L gardenWemos-rescue:+5V-power #PWR0104
+U 1 1 5CE3BF5E
+P 3125 1625
+F 0 "#PWR0104" H 3125 1475 50  0001 C CNN
+F 1 "+5V" H 3140 1798 50  0000 C CNN
+F 2 "" H 3125 1625 50  0001 C CNN
+F 3 "" H 3125 1625 50  0001 C CNN
+	1    3125 1625
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3125 1625 3125 1750
+Wire Wire Line
+	3125 2150 3125 2275
+Wire Wire Line
+	3125 2700 3125 2825
+Wire Wire Line
+	3125 2275 3300 2275
+Connection ~ 3125 2275
+Wire Wire Line
+	3125 2275 3125 2400
+Text Label 3300 2275 0    50   ~ 0
+LightOut
+Text Label 8700 4025 2    50   ~ 0
+Moisture2
+Wire Wire Line
+	8825 3925 8700 3925
+Wire Wire Line
+	8700 4025 8825 4025
+Wire Wire Line
+	8825 4825 8700 4825
+Wire Wire Line
+	8700 4925 8825 4925
+Wire Wire Line
+	8825 5025 8700 5025
+Wire Wire Line
+	8825 5125 8700 5125
+Wire Wire Line
+	7000 4250 7125 4250
+Text Label 7125 4250 0    50   ~ 0
+AnalogInput
+Wire Wire Line
+	6000 3850 5875 3850
+Text Label 5875 3850 2    50   ~ 0
+IO_DHT
+Wire Wire Line
+	7000 4150 7125 4150
+Text Label 7125 3850 0    50   ~ 0
+inh
+Text Label 8700 4925 2    50   ~ 0
+A
+Text Label 8700 5025 2    50   ~ 0
+B
+Text Label 8700 5125 2    50   ~ 0
+C
+Text Label 9950 3925 0    50   ~ 0
+AnalogInput
+Wire Wire Line
+	9825 3925 9950 3925
+$Comp
+L gardenWemos-rescue:GND-power #PWR0105
+U 1 1 5CE49A43
+P 9375 5550
+F 0 "#PWR0105" H 9375 5300 50  0001 C CNN
+F 1 "GND" H 9380 5377 50  0000 C CNN
+F 2 "" H 9375 5550 50  0001 C CNN
+F 3 "" H 9375 5550 50  0001 C CNN
+	1    9375 5550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9425 5425 9425 5475
+Wire Wire Line
+	9425 5475 9375 5475
+Wire Wire Line
+	9375 5475 9375 5550
+Wire Wire Line
+	9325 5425 9325 5475
+Wire Wire Line
+	9325 5475 9375 5475
+Connection ~ 9375 5475
+$Comp
+L gardenWemos-rescue:+5V-power #PWR0106
+U 1 1 5CE4B9DE
+P 9325 3500
+F 0 "#PWR0106" H 9325 3350 50  0001 C CNN
+F 1 "+5V" H 9340 3673 50  0000 C CNN
+F 2 "" H 9325 3500 50  0001 C CNN
+F 3 "" H 9325 3500 50  0001 C CNN
+	1    9325 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9325 3625 9325 3500
+Wire Wire Line
+	7125 4050 7000 4050
+Wire Wire Line
+	7000 3950 7125 3950
+Wire Wire Line
+	7000 3850 7125 3850
+Text Label 7125 4150 0    50   ~ 0
+A
+Text Label 7125 4050 0    50   ~ 0
+B
+Text Label 7125 3950 0    50   ~ 0
+C
+Text Label 8700 4825 2    50   ~ 0
+inh
+NoConn ~ 8825 4225
+NoConn ~ 8825 4325
+NoConn ~ 8825 4425
+NoConn ~ 8825 4525
+NoConn ~ 8825 4625
+NoConn ~ 7000 3650
+NoConn ~ 7000 4350
+NoConn ~ 6000 4350
+NoConn ~ 6000 4250
+NoConn ~ 6000 3950
+$Comp
+L gardenWemos-rescue:Conn_01x01_Female-Connector J1
+U 1 1 5CE56954
+P 5425 4050
+F 0 "J1" H 5375 4000 50  0000 C CNN
+F 1 "Conn_01x01_Female" H 5317 3916 50  0001 C CNN
+F 2 "Connectorss:Pin_d1.0mm_L10.0mm" H 5425 4050 50  0001 C CNN
+F 3 "~" H 5425 4050 50  0001 C CNN
+	1    5425 4050
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	6000 4050 5625 4050
+$Comp
+L gardenWemos-rescue:Conn_01x01_Female-Connector J2
+U 1 1 5CE58873
+P 5425 4150
+F 0 "J2" H 5375 4100 50  0000 C CNN
+F 1 "Conn_01x01_Female" H 5317 4016 50  0001 C CNN
+F 2 "Connectorss:Pin_d1.0mm_L10.0mm" H 5425 4150 50  0001 C CNN
+F 3 "~" H 5425 4150 50  0001 C CNN
+	1    5425 4150
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	6000 4150 5625 4150
+Text Label 5875 4050 2    50   ~ 0
+SCL
+Text Label 5875 4150 2    50   ~ 0
+SDA
+$Comp
+L gardenWemos-rescue:Screw_Terminal_01x02-Connector J3
+U 1 1 5CE514BE
+P 9775 2725
+F 0 "J3" H 9855 2671 50  0000 L CNN
+F 1 "Screw_Terminal_01x02" V 9648 2537 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_Wuerth_691311400102_P7.62mm" H 9775 2725 50  0001 C CNN
+F 3 "~" H 9775 2725 50  0001 C CNN
+	1    9775 2725
+	1    0    0    -1  
+$EndComp
+$Comp
+L My_symbols:MoistSensor U5
+U 1 1 5CE58BE1
+P 3550 4000
+F 0 "U5" H 3108 4125 50  0000 C CNN
+F 1 "MoistSensor" H 3108 4034 50  0000 C CNN
+F 2 "Connectorss:Fan_Pin_Header_Straight_1x03" H 3550 4000 50  0001 C CNN
+F 3 "" H 3550 4000 50  0001 C CNN
+	1    3550 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3750 4300 3875 4300
+Wire Wire Line
+	3750 4200 3875 4200
+Wire Wire Line
+	3750 4100 3875 4100
+Text Label 3875 4200 0    50   ~ 0
++5V
+Text Label 3875 4100 0    50   ~ 0
+GND
+Wire Wire Line
+	8825 4125 8700 4125
+Text Label 8700 4125 2    50   ~ 0
+LightOut
+$Comp
+L gardenWemos-rescue:Q_NMOS_GSD-device Q1
+U 1 1 5CE60364
+P 9225 2400
+F 0 "Q1" H 9431 2446 50  0000 L CNN
+F 1 "NTR4003NT1G" H 9431 2355 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23_Handsoldering" H 9425 2500 50  0001 C CNN
+F 3 "" H 9225 2400 50  0001 C CNN
+	1    9225 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L gardenWemos-rescue:GND-power #PWR0107
+U 1 1 5CE728AB
+P 9325 2950
+F 0 "#PWR0107" H 9325 2700 50  0001 C CNN
+F 1 "GND" H 9330 2777 50  0000 C CNN
+F 2 "" H 9325 2950 50  0001 C CNN
+F 3 "" H 9325 2950 50  0001 C CNN
+	1    9325 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L gardenWemos-rescue:+5V-power #PWR0108
+U 1 1 5CE7C027
+P 9325 2075
+F 0 "#PWR0108" H 9325 1925 50  0001 C CNN
+F 1 "+5V" H 9340 2248 50  0000 C CNN
+F 2 "" H 9325 2075 50  0001 C CNN
+F 3 "" H 9325 2075 50  0001 C CNN
+	1    9325 2075
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9325 2600 9325 2725
+Wire Wire Line
+	9325 2725 9575 2725
+Wire Wire Line
+	9575 2825 9325 2825
+Wire Wire Line
+	9325 2825 9325 2950
+Wire Wire Line
+	9325 2075 9325 2200
+Wire Wire Line
+	7000 3750 7125 3750
+Text Label 7125 3750 0    50   ~ 0
+WaterPump
+Text Label 8875 2400 2    50   ~ 0
+WaterPump
+Text Label 3875 3725 0    50   ~ 0
+Moisture1
+Text Label 3875 4300 0    50   ~ 0
+Moisture2
+$Comp
+L gardenWemos-rescue:R-device R4
+U 1 1 5CE5AF5F
+P 8950 2725
+F 0 "R4" H 9020 2771 50  0000 L CNN
+F 1 "10k" H 9020 2680 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 8880 2725 50  0001 C CNN
+F 3 "" H 8950 2725 50  0001 C CNN
+	1    8950 2725
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 2875 8950 2950
+Wire Wire Line
+	8875 2400 8950 2400
+Wire Wire Line
+	8950 2575 8950 2400
+Connection ~ 8950 2400
+Wire Wire Line
+	8950 2400 9025 2400
+$Comp
+L gardenWemos-rescue:GND-power #PWR0109
+U 1 1 5CE5F74E
+P 8950 2950
+F 0 "#PWR0109" H 8950 2700 50  0001 C CNN
+F 1 "GND" H 8955 2777 50  0000 C CNN
+F 2 "" H 8950 2950 50  0001 C CNN
+F 3 "" H 8950 2950 50  0001 C CNN
+	1    8950 2950
+	1    0    0    -1  
+$EndComp
+Text Label 3625 4850 2    50   ~ 0
++5V
+$EndSCHEMATC

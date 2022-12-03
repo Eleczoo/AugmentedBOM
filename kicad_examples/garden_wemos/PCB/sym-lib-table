@@ -1,0 +1,9 @@
+(sym_lib_table
+  (lib (name ch34x)(type Legacy)(uri C:/Users/Jonas/Dropbox/Kicad/GardenWemos/SYMBOLES/ch34x.lib)(options "")(descr ""))
+  (lib (name MY_SYMBOLES)(type Legacy)(uri C:/Users/Jonas/Dropbox/Kicad/GardenWemos/SYMBOLES/MY_SYMBOLES.lib)(options "")(descr ""))
+  (lib (name SYMBOLES_LIB)(type Legacy)(uri C:/Users/Jonas/Dropbox/Kicad/GardenWemos/SYMBOLES/SYMBOLES_LIB.lib)(options "")(descr ""))
+  (lib (name wemos_mini)(type Legacy)(uri C:/Users/Jonas/Dropbox/Kicad/GardenWemos/SYMBOLES/wemos_mini.lib)(options "")(descr ""))
+  (lib (name 4xxx)(type Legacy)(uri C:/Users/Jonas/Dropbox/Kicad/GardenWemos/SYMBOLES/4xxx.lib)(options "")(descr ""))
+  (lib (name My_symbols)(type Legacy)(uri C:/Users/Jonas/Dropbox/Kicad/GardenWemos/SYMBOLES/My_symbols.lib)(options "")(descr ""))
+  (lib (name gardenWemos-rescue)(type Legacy)(uri ${KIPRJMOD}/gardenWemos-rescue.lib)(options "")(descr ""))
+)
