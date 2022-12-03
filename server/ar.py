@@ -40,7 +40,8 @@ if __name__ == "__main__":
 	NB_FEATURES = 250
 
 	# feed = get_feed()
-	feed = cv2.VideoCapture(0)
+	feed = get_feed(ip="192.168.59.242")
+	# feed = cv2.VideoCapture(0)
 	running = True
 	while running:
 		_, frame = feed.read()
@@ -49,9 +50,13 @@ if __name__ == "__main__":
 	
 		matches = bf.match(desfront,des2)
 		matches = sorted(matches, key = lambda x:x.distance)
-		# if (len(matches) < NB_FEATURES):
-		# 	cv2.imshow("og",frame)
-		# 	continue
+		if (len(matches) < NB_FEATURES):
+			cv2.imshow("og",frame)
+			if cv2.waitKey(1) == ord("q"):
+				running = False
+			continue
+
+		
 		print(len(matches))
 		srcpts = np.float32([kpfront[p.queryIdx].pt for p in matches[:NB_FEATURES]]).reshape(-1, 1, 2)
 		dstpts = np.float32([kp2[p.trainIdx].pt for p in matches[:NB_FEATURES]]).reshape(-1, 1, 2)
