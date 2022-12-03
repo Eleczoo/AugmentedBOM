@@ -9,15 +9,11 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
-
 @app.route('/postmethod', methods = ['POST'])
 def get_post_data():
 	rcv_data = request.form['javascript_data']
 	jsdata = dict(json.loads(rcv_data))
-	print(jsdata["bom"])
+	#print(jsdata["bom"])
 	return "200"
 
 if __name__ == "__main__":
