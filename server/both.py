@@ -7,8 +7,8 @@ import json
 import draw
 import cv2
 import os 
+import flag
 
-flag_redraw = True
 
 def frame_getter(feed):  
 	import time
@@ -33,7 +33,7 @@ jsdata = dict()
 
 @app.route("/live")
 def live():
-	global flag_redraw
+
 	try:
 		if not os.path.exists("front.png"):
 			get_screenshot("front.png")
@@ -46,8 +46,8 @@ def live():
 		kpfront, desfront = orb.detectAndCompute(frontTargetImg, None)
 
 		feed = get_feed()
-		print(f"Flag_redraw live : {flag_redraw}")
-		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, flag_redraw), mimetype='multipart/x-mixed-replace; boundary=frame')
+		print(f"Flag_redraw live : {flag.flag_redraw}")
+		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, flag.flag_redraw), mimetype='multipart/x-mixed-replace; boundary=frame')
 	except Exception as e:
 		print(f"Exception : {e}")
 
@@ -67,11 +67,11 @@ def get_post_data():
 
 @app.route('/postnet', methods = ['POST'])
 def get_net_data():
-	global jsdata, flag_redraw
+	global jsdata
 	rcv_data = request.form['javascript_data']
 	#print(rcv_data)
 	draw.draw_pcb(jsdata, [rcv_data], [], 15)
-	flag_redraw = True
+	flag.flag_redraw = True
 	return "200"
 
 if __name__ == "__main__":

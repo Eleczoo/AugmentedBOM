@@ -3,6 +3,7 @@ from get_cam import get_feed
 import numpy as np
 import os.path
 import cv2
+import flag
 
 def get_homography_matrix(kp1, kp2, good):
 	srcPts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1 ,2)
@@ -27,9 +28,9 @@ def generator(feed, kpfront, desfront, bf, orb, targetShape, flag_redraw, NB_FEA
 	hF, wF = targetShape[:2]
 	running = True
 	while running:
-		print(flag_redraw)
-		if flag_redraw:
-			flag_redraw = False
+		#print(flag_redraw)
+		if flag.flag_redraw:
+			flag.flag_redraw = False
 			print("here")
 			circuit = cv2.imread("circuit_draw.png")
 			circuit = cv2.resize(circuit, (wF, hF))
@@ -52,8 +53,11 @@ def generator(feed, kpfront, desfront, bf, orb, targetShape, flag_redraw, NB_FEA
 
 		cv2.polylines(frame, [np.int32(dst)], True, (255, 0, 0), 3)
 
-		warped = cv2.warpPerspective(circuit, matrix, (frame.shape[1], frame.shape[0]))
-
+		try:
+			warped = cv2.warpPerspective(circuit, matrix, (frame.shape[1], frame.shape[0]))
+		except:
+			flag.flag_redraw = True
+			continue
 		stack_images(frame, warped)
 		ret, buffer = cv2.imencode(".jpg", frame)
 		frame = buffer.tobytes()
