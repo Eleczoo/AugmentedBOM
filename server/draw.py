@@ -33,7 +33,6 @@ def draw_pcb(dico, net_list, comp_list, ratio = 15):
 	w_x = int(pcb_data["edges_bbox"]["maxx"] * ratio) - int(pcb_data["edges_bbox"]["minx"] * ratio)
 	w_y = int(pcb_data["edges_bbox"]["maxy"] * ratio) - int(pcb_data["edges_bbox"]["miny"] * ratio)
 	color = (0, 0, 0)
-	print("HELP")
 	#color = (48, 44, 37)
 	img = np.full((w_y, w_x, 3), color,np.uint8)
 
@@ -49,7 +48,7 @@ def draw_pcb(dico, net_list, comp_list, ratio = 15):
 	# Draw Componants pads
 	draw_pads(pcb_data, img, ratio, comp_list)
 
-	cv.imwrite("test.png", img)
+	cv.imwrite("circuit_draw.png", img)
 	# Show context
 	#cv.imshow("AugmentedBOM", img)
 	#cv.waitKey(0)
@@ -65,7 +64,6 @@ def draw_edge_cuts(pcb_data , canvas, ratio = 1, color=(255, 255, 255)):
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
 
-	print("EDGE CUTS")
 
 	for edge in pcb_data["edges"]:
 		#print(edge)
@@ -79,13 +77,11 @@ def draw_edge_cuts(pcb_data , canvas, ratio = 1, color=(255, 255, 255)):
 			stop[0] -= minx;stop[1] -= miny
 			stop = scale(stop, ratio)
 			stop = list(map(int,stop))
-			print("LINE")
 			cv.line(canvas, start, stop, color)
 		elif edge["type"] == "arc":
 			radius = int(edge["radius"] * ratio)
 			start_angle = edge["startangle"]
 			end_angle = edge["endangle"]
-			print("ELLIPSE")
 			cv.ellipse(canvas, start, (radius, radius), 0, start_angle, end_angle, color)
 
 def draw_net(pcb_data, canvas, ratio, net_list):
@@ -119,7 +115,7 @@ def draw_net(pcb_data, canvas, ratio, net_list):
 			stop = scale(stop, ratio)
 			stop = list(map(int,stop))
 
-			width = track["width"] * ratio / 2
+			width = track["width"] * ratio / 1.5
 			if layer == "B":
 				color = bg_color
 			elif layer == "F":

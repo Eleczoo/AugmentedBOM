@@ -2131,11 +2131,59 @@ function recalcLayerScale(layerdict, width, height) {
   }
 }
 
-function redrawCanvas(layerdict) {
-  prepareLayer(layerdict);
-  drawBackground(layerdict);
-  drawHighlightsOnLayer(layerdict);
+function getOffset(el) {
+  const rect = el.getBoundingClientRect();
+  return {
+    left: rect.left + window.scrollX,
+    top: rect.top + window.scrollY
+  };
 }
+
+function render_Iframe(layerdict)
+{
+		// From a random item, get the context
+	  var ctx = layerdict["bg"].getContext("2d");
+		
+		document.querySelectorAll('iframe')
+  .forEach(iframe => iframe.remove());
+
+		var bk_el = document.getElementById("backcanvas");
+		div_top = getOffset(bk_el).top;
+		div_left = getOffset(bk_el).left;
+		div_height = bk_el.clientHeight;
+		div_width = bk_el.clientWidth;
+
+		ifrm = document.createElement("IFRAME");
+		ifrm.setAttribute("src","http://127.0.0.1:5000/live");
+		//ifrm.setAttribute("onmouseout","closeFrame()")
+		ifrm.style.display = "block";
+		ifrm.style.width = div_width+"px";
+		ifrm.style.height = div_height+"px";
+		ifrm.style.position = "absolute";
+		ifrm.style.top=div_top+"px";
+		ifrm.style.left=div_left+"px";
+		ifrm.style.zIndex= "101";
+
+		document.body.appendChild(ifrm);
+		return true;
+}	
+
+function redrawCanvas(layerdict) {
+	if(layerdict.layer != "B")
+	{
+		prepareLayer(layerdict);
+		drawBackground(layerdict);
+		drawHighlightsOnLayer(layerdict);
+	}
+	else
+	{
+		// Clear everything in the canvas and put an iframe ??
+		render_Iframe(layerdict);
+
+	}
+
+}
+
 
 function resizeCanvas(layerdict) {
   var canvasdivid = {

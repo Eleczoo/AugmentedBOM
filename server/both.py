@@ -2,11 +2,13 @@ from get_cam import get_feed, show_feed
 from ar import generator, get_screenshot
 from flask import Flask, request
 from flask import Response
+from flask_cors import CORS
 import json
 import draw
 import cv2
 import os 
 
+flag_redraw = True
 
 def frame_getter(feed):  
 	import time
@@ -26,18 +28,16 @@ def frame_getter(feed):
 
 feed = get_feed()
 app = Flask(__name__)
+CORS(app)
 jsdata = dict()
 
 @app.route("/live")
 def live():
+	global flag_redraw
 	try:
 		if not os.path.exists("front.png"):
 			get_screenshot("front.png")
 		frontTargetImg = cv2.imread("front.png")
-		hF, wF = frontTargetImg.shape[:2]
-
-		circuit = cv2.imread("../circuit_draw.png")
-		circuit = cv2.resize(circuit, (wF, hF))
 
 		orb = cv2.ORB_create(1000)
 		bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
@@ -46,7 +46,8 @@ def live():
 		kpfront, desfront = orb.detectAndCompute(frontTargetImg, None)
 
 		feed = get_feed()
-		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, circuit), mimetype='multipart/x-mixed-replace; boundary=frame')
+		print(f"Flag_redraw live : {flag_redraw}")
+		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, flag_redraw), mimetype='multipart/x-mixed-replace; boundary=frame')
 	except Exception as e:
 		print(f"Exception : {e}")
 
@@ -66,10 +67,11 @@ def get_post_data():
 
 @app.route('/postnet', methods = ['POST'])
 def get_net_data():
-	global jsdata
+	global jsdata, flag_redraw
 	rcv_data = request.form['javascript_data']
 	#print(rcv_data)
 	draw.draw_pcb(jsdata, [rcv_data], [], 15)
+	flag_redraw = True
 	return "200"
 
 if __name__ == "__main__":

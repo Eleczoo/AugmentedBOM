@@ -23,10 +23,17 @@ def stack_images(base_img, img):
 
 
 
-def generator(feed, kpfront, desfront, bf, orb, targetShape, circuit, NB_FEATURES=250):
+def generator(feed, kpfront, desfront, bf, orb, targetShape, flag_redraw, NB_FEATURES=250):
 	hF, wF = targetShape[:2]
 	running = True
 	while running:
+		print(flag_redraw)
+		if flag_redraw:
+			flag_redraw = False
+			print("here")
+			circuit = cv2.imread("circuit_draw.png")
+			circuit = cv2.resize(circuit, (wF, hF))
+
 		_, frame = feed.read()
 		
 		kp2, des2 = orb.detectAndCompute(frame,None)
