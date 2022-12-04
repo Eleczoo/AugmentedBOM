@@ -21,5 +21,11 @@ def get_post_data():
 	#print(jsdata["bom"])
 	return "200"
 
+@app.route('/postnet', methods = ['POST'])
+def get_post_data():
+	rcv_data = request.form['javascript_data']
+	print(rcv_data)
+	return "200"
+
 if __name__ == "__main__":
-	app.run(host="0.0.0.0")
+	app.run()

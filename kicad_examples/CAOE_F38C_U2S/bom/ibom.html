@@ -896,7 +896,7 @@ var pcbdata = JSON.parse(LZString.decompressFromBase64("N4IgpgJg5mDOD6AjRB7AHiAX
 ///////////////////////////////////////////////
 
 // SEND DATA TO SERVER 
-$.post( "http://10.177.243.170:5000/postmethod", {
+$.post( "http://127.0.0.1:5000/postmethod", {
     javascript_data: JSON.stringify(pcbdata)
 });
 ///////////////////////////////////////////////
@@ -3684,6 +3684,11 @@ function netClicked(net) {
   } else {
     clearHighlightedFootprints();
     highlightedNet = net;
+    // ELECZOO
+    // console.log(net)
+    $.post( "http://127.0.0.1:5000/postnet", {
+      javascript_data: net
+    });
     drawHighlights();
   }
 }
