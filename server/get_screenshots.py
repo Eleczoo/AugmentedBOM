@@ -37,6 +37,7 @@ def getSubRect(image,rect):
 def get_screenshot(filename):
 	global frame
 	feed = get_feed()
+	# feed = cv2.VideoCapture("/dev/video4")
 	cv2.namedWindow("image")
 	cv2.setMouseCallback("image", draw_circle_on_click)
 	
@@ -79,7 +80,6 @@ def get_screenshot(filename):
 				matrix[1, 2] += bound_h/2 - origin[1]
 
 				new_frame = cv2.warpAffine(original_frame, matrix, (bound_w,bound_h))
-
 
 				# transform points
 				points = np.array(pcb_edge)
