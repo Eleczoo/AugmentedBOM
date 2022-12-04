@@ -2,4 +2,4 @@
 
 Demo 
 
-![](demo.gif)
+![](assets/demo.gif)
