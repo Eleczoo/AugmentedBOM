@@ -1,11 +1,13 @@
 
 def frame_getter(feed):  
+	import time
 	import cv2
 	# source : https://stackoverflow.com/questions/72138213/serving-local-webcam-video-stream-to-web-with-multipart-mixed-replace-http-res
 	while(True):
 		ret, frame = feed.read()
 		if not ret:
-			break
+			time.sleep(0.5)
+			continue
 		else:
 			# encode frame to jpg
 			ret, buffer = cv2.imencode('.jpg', frame)

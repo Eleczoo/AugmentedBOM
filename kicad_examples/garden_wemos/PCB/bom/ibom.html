@@ -2145,15 +2145,15 @@ function render_Iframe(layerdict)
 		var bk_el = document.getElementById("backcanvas");
 		div_top = getOffset(bk_el).top;
 		div_left = getOffset(bk_el).left;
-		console.log("top : " + div_top);
-		console.log("left : " + div_left);
+		div_height = bk_el.clientHeight;
+		div_width = bk_el.clientWidth;
 
 		ifrm = document.createElement("IFRAME");
 		ifrm.setAttribute("src","http://127.0.0.1:5000/live");
 		//ifrm.setAttribute("onmouseout","closeFrame()")
 		ifrm.style.display = "block";
-		ifrm.style.width = 640+"px";
-		ifrm.style.height = 480+"px";
+		ifrm.style.width = div_width+"px";
+		ifrm.style.height = div_height+"px";
 		ifrm.style.position = "absolute";
 		ifrm.style.top=div_top+"px";
 		ifrm.style.left=div_left+"px";
