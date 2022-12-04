@@ -31,7 +31,6 @@ def generator(feed, kpfront, desfront, bf, orb, targetShape, flag_redraw, NB_FEA
 		#print(flag_redraw)
 		if flag.flag_redraw:
 			flag.flag_redraw = False
-			print("here")
 			circuit = cv2.imread("circuit_draw.png")
 			circuit = cv2.resize(circuit, (wF, hF))
 

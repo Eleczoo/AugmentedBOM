@@ -3163,6 +3163,29 @@ function setBomCheckboxState(checkbox, element, references) {
 
 function createCheckboxChangeHandler(checkbox, references, row) {
   return function () {
+
+    // ELECZOO
+
+    if (checkbox == "Sourced")
+    {
+      if (row.cells[1].lastChild.checked)
+      {
+        refs = ["BOX", "ADD"];
+      }
+      else
+      {
+        refs = ["BOX", "DEL"]
+      }
+      references.forEach(element => {
+        refs.push(element[0])
+      });
+      
+
+      $.post( "http://127.0.0.1:5000/postdraw", {
+      javascript_data: JSON.stringify(refs)
+    });
+    }
+
     refsSet = getStoredCheckboxRefs(checkbox);
     var markWhenChecked = settings.markWhenChecked == checkbox;
     eventArgs = {
@@ -3740,8 +3763,10 @@ function netClicked(net) {
     highlightedNet = net;
     // ELECZOO
     // console.log(net)
-    $.post( "http://127.0.0.1:5000/postnet", {
-      javascript_data: net
+    var arr = ["NET", "ADD", net];
+    // $.post( "http://127.0.0.1:5000/postnet", {
+    $.post( "http://127.0.0.1:5000/postdraw", {
+      javascript_data: JSON.stringify(arr)
     });
     drawHighlights();
   }

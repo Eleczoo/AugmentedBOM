@@ -30,6 +30,7 @@ feed = get_feed()
 app = Flask(__name__)
 CORS(app)
 jsdata = dict()
+bounding_list = []
 
 @app.route("/live")
 def live():
@@ -46,7 +47,6 @@ def live():
 		kpfront, desfront = orb.detectAndCompute(frontTargetImg, None)
 
 		feed = get_feed()
-		print(f"Flag_redraw live : {flag.flag_redraw}")
 		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, flag.flag_redraw), mimetype='multipart/x-mixed-replace; boundary=frame')
 	except Exception as e:
 		print(f"Exception : {e}")
@@ -74,14 +74,55 @@ def get_net_data():
 	flag.flag_redraw = True
 	return "200"
 
-# @app.route('/postbounding', methods = ['POST'])
-# def get_bounding_data():
-# 	global jsdata
-# 	rcv_data = request.form['javascript_data']
-# 	# print(rcv_data)
-# 	draw.draw_pcb(jsdata, [], [rcv_data], 15)
-# 	flag.flag_redraw = True
-# 	return "200"
+@app.route('/postbound', methods = ['POST'])
+def get_bounding_data():
+	global jsdata, bounding_list
+	rcv_data = request.form['javascript_data']
+	data = json.loads(rcv_data)
+
+	action = data.pop(0)
+
+	if action == "ADD":
+		bounding_list.extend(data)
+	elif action == "DEL":
+		for ref in data:
+			try:
+				bounding_list.remove(ref)
+			except:
+				pass
+	
+	draw.draw_pcb(jsdata, [rcv_data], [], 15)
+	flag.flag_redraw = True
+	return "200"
+
+@app.route('/postdraw', methods = ['POST'])
+def get_drawing_data():
+	global jsdata, bounding_list
+	netlist = []
+	rcv_data = request.form['javascript_data']
+	data = json.loads(rcv_data)
+
+	type_drawing 	= data.pop(0)
+	action 			= data.pop(0)
+
+	if type_drawing == "NET":
+		if data[0] != None:
+			netlist.append(data[0])
+	
+	elif type_drawing == "BOX":
+		if action == "ADD":
+			bounding_list.extend(data)
+		elif action == "DEL":
+			for ref in data:
+				try:
+					bounding_list.remove(ref)
+				except:
+					pass
+	
+
+	draw.draw_pcb(jsdata, netlist, bounding_list, 15)
+	flag.flag_redraw = True
+	return "200"
 
 if __name__ == "__main__":
 	app.run()
