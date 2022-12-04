@@ -23,6 +23,36 @@ def stack_images(base_img, img):
 
 
 
+def generator(feed, kpfront, desfront, bf, orb, targetShape, circuit, NB_FEATURES=250):
+	hF, wF = targetShape[:2]
+	running = True
+	while running:
+		_, frame = feed.read()
+		
+		kp2, des2 = orb.detectAndCompute(frame,None)
+	
+		matches_front = bf.match(desfront,des2)
+		matches_front = sorted(matches_front, key = lambda x:x.distance)
+
+		# print(len(matches_front))
+		srcpts = np.float32([kpfront[p.queryIdx].pt for p in matches_front[:NB_FEATURES]]).reshape(-1, 1, 2)
+		dstpts = np.float32([kp2[p.trainIdx].pt for p in matches_front[:NB_FEATURES]]).reshape(-1, 1, 2)
+
+		matrix, mask = cv2.findHomography(srcpts, dstpts, cv2.RANSAC, 5)
+
+		pts = np.float32([[0,0], [0, hF], [wF, hF], [wF, 0]]).reshape(-1, 1, 2)
+		dst = cv2.perspectiveTransform(pts, matrix)
+
+		cv2.polylines(frame, [np.int32(dst)], True, (255, 0, 0), 3)
+
+		warped = cv2.warpPerspective(circuit, matrix, (frame.shape[1], frame.shape[0]))
+
+		stack_images(frame, warped)
+		ret, buffer = cv2.imencode(".jpg", frame)
+		frame = buffer.tobytes()
+		yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
 if __name__ == "__main__":
 	if not os.path.exists("front.png"):
 		get_screenshot("front.png")
@@ -41,7 +71,7 @@ if __name__ == "__main__":
 
 	# FRONT
 	kpfront, desfront = orb.detectAndCompute(frontTargetImg, None)
-	front_target = cv2.drawKeypoints(frontTargetImg, kpfront, None)
+	# front_target = cv2.drawKeypoints(frontTargetImg, kpfront, None)
 
 	# BACK
 	# kpback, desback = orb.detectAndCompute(backTargetImg, None)
@@ -55,54 +85,4 @@ if __name__ == "__main__":
 	feed = get_feed()
 	# feed = get_feed(ip="192.168.59.242")
 	# feed = cv2.VideoCapture("/dev/video4")
-	count = 0
-	running = True
-	while running:
-		_, frame = feed.read()
-		
-		kp2, des2 = orb.detectAndCompute(frame,None)
-	
-		matches_front = bf.match(desfront,des2)
-		matches_front = sorted(matches_front, key = lambda x:x.distance)
-		# if (len(matches_front) < NB_FEATURES):
-		# 	cv2.imshow("og",frame)
-		# 	if cv2.waitKey(1) == ord("q"):
-		# 		running = False
-		# 	continue
-		
-		# matches_back = bf.match(desback,des2)
-		# matches_back = sorted(matches_back, key = lambda x:x.distance)
-		# if (len(matches_back) < NB_FEATURES):
-		# 	cv2.imshow("og",frame)
-		# 	if cv2.waitKey(1) == ord("q"):
-		# 		running = False
-		# 	continue
-
-
-		# print(f"Front : {len(matches_front)} | Back : {len(matches_back)}")
-		matches = matches_front
-
-		# print(len(matches))
-		srcpts = np.float32([kpfront[p.queryIdx].pt for p in matches[:NB_FEATURES]]).reshape(-1, 1, 2)
-		dstpts = np.float32([kp2[p.trainIdx].pt for p in matches[:NB_FEATURES]]).reshape(-1, 1, 2)
-
-		matrix, mask = cv2.findHomography(srcpts, dstpts, cv2.RANSAC, 5)
-
-		pts = np.float32([[0,0], [0, hF], [wF, hF], [wF, 0]]).reshape(-1, 1, 2)
-		dst = cv2.perspectiveTransform(pts, matrix)
-
-		cv2.polylines(frame, [np.int32(dst)], True, (255, 0, 0), 3)
-
-		warped = cv2.warpPerspective(circuit, matrix, (frame.shape[1], frame.shape[0]))
-
-		stack_images(frame, warped)
-
-		# cv2.imshow("image",img3)
-		cv2.imshow("og",frame)
-		# cv2.imshow("draw",circuit)
-		# cv2.imshow("warped",warped)
-
-
-
-		if cv2.waitKey(1) == ord("q"):
-			running = False
+	generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, circuit)

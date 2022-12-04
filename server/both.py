@@ -1,8 +1,12 @@
 from get_cam import get_feed, show_feed
+from ar import generator, get_screenshot
 from flask import Flask, request
 from flask import Response
 import json
 import draw
+import cv2
+import os 
+
 
 def frame_getter(feed):  
 	import time
@@ -27,7 +31,22 @@ jsdata = dict()
 @app.route("/live")
 def live():
 	try:
-		return Response(frame_getter(feed), mimetype='multipart/x-mixed-replace; boundary=frame')
+		if not os.path.exists("front.png"):
+			get_screenshot("front.png")
+		frontTargetImg = cv2.imread("front.png")
+		hF, wF = frontTargetImg.shape[:2]
+
+		circuit = cv2.imread("../circuit_draw.png")
+		circuit = cv2.resize(circuit, (wF, hF))
+
+		orb = cv2.ORB_create(1000)
+		bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
+		# FRONT
+		kpfront, desfront = orb.detectAndCompute(frontTargetImg, None)
+
+		feed = get_feed()
+		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, circuit), mimetype='multipart/x-mixed-replace; boundary=frame')
 	except Exception as e:
 		print(f"Exception : {e}")
 

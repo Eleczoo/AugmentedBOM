@@ -98,8 +98,9 @@ def get_screenshot(filename):
 
 				crop = getSubRect(new_frame, rect)
 				cv2.imwrite(filename, crop)
-				cv2.imshow("image", crop)
-				cv2.waitKey(0)
+				# cv2.imshow("image", crop)
+				# cv2.waitKey(0)
+				cv2.destroyAllWindows()
 				running = False
 
 			# delete : Delete point
