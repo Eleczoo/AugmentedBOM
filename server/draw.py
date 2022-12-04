@@ -2,6 +2,7 @@ import json
 import numpy as np
 import cv2 as cv
 import math
+import copy
 
 def get_json_file(filename):
 	with open(filename, "r") as f:
@@ -26,11 +27,13 @@ def check_if_th(dico):
 			return True
 	return False
 
-def draw_pcb(pcb_data, net_list, comp_list, ratio = 15):
+def draw_pcb(dico, net_list, comp_list, ratio = 15):
+	pcb_data = copy.deepcopy(dico)
 	# Create a black background
 	w_x = int(pcb_data["edges_bbox"]["maxx"] * ratio) - int(pcb_data["edges_bbox"]["minx"] * ratio)
 	w_y = int(pcb_data["edges_bbox"]["maxy"] * ratio) - int(pcb_data["edges_bbox"]["miny"] * ratio)
 	color = (0, 0, 0)
+	print("HELP")
 	#color = (48, 44, 37)
 	img = np.full((w_y, w_x, 3), color,np.uint8)
 
@@ -46,19 +49,23 @@ def draw_pcb(pcb_data, net_list, comp_list, ratio = 15):
 	# Draw Componants pads
 	draw_pads(pcb_data, img, ratio, comp_list)
 
+	cv.imwrite("test.png", img)
 	# Show context
-	cv.imshow("AugmentedBOM", img)
-	cv.waitKey(0)
+	#cv.imshow("AugmentedBOM", img)
+	#cv.waitKey(0)
 
 def scale(pos, ratio):
 	for i in range (len(pos)):
 		pos[i] *= ratio
 	return pos
 
-def draw_edge_cuts(pcb_data, canvas, ratio = 1, color=(255, 255, 255)):
+def draw_edge_cuts(pcb_data , canvas, ratio = 1, color=(255, 255, 255)):
+	
 	# Get base offset
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
+
+	print("EDGE CUTS")
 
 	for edge in pcb_data["edges"]:
 		#print(edge)
@@ -72,11 +79,13 @@ def draw_edge_cuts(pcb_data, canvas, ratio = 1, color=(255, 255, 255)):
 			stop[0] -= minx;stop[1] -= miny
 			stop = scale(stop, ratio)
 			stop = list(map(int,stop))
+			print("LINE")
 			cv.line(canvas, start, stop, color)
 		elif edge["type"] == "arc":
 			radius = int(edge["radius"] * ratio)
 			start_angle = edge["startangle"]
 			end_angle = edge["endangle"]
+			print("ELLIPSE")
 			cv.ellipse(canvas, start, (radius, radius), 0, start_angle, end_angle, color)
 
 def draw_net(pcb_data, canvas, ratio, net_list):
@@ -123,12 +132,6 @@ def draw_bounding_box(pcb_data, canvas, ratio, comp_list):
 	# Get base offset
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
-
-	w_x = int(pcb_data["edges_bbox"]["maxx"] * ratio) - int(pcb_data["edges_bbox"]["minx"] * ratio)
-	w_y = int(pcb_data["edges_bbox"]["maxy"] * ratio) - int(pcb_data["edges_bbox"]["miny"] * ratio)
-	color = (0, 0, 0)
-	#color = (48, 44, 37)
-	img = np.full((w_y, w_x, 3), color,np.uint8)
 
 	for f in pcb_data["footprints"]:
 		if check_if_th(f):
@@ -191,7 +194,7 @@ def draw_pads(pcb_data, canvas, ratio, comp_list):
 
 
 if __name__ == "__main__":
-	pcb_data = get_json_file("data.txt")
+	#pcb_data = get_json_file("data.txt")
 
-	draw_pcb(pcb_data, [], [], 15)
-	
+	#draw_pcb(pcb_data, [], [], 15)
+	pass

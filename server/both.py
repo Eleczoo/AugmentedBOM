@@ -2,6 +2,7 @@ from get_cam import get_feed, show_feed
 from flask import Flask, request
 from flask import Response
 import json
+import draw
 
 def frame_getter(feed):  
 	import time
@@ -21,6 +22,7 @@ def frame_getter(feed):
 
 feed = get_feed()
 app = Flask(__name__)
+jsdata = dict()
 
 @app.route("/live")
 def live():
@@ -31,20 +33,24 @@ def live():
 
 @app.route('/postmethod', methods = ['POST'])
 def get_post_data():
+	global jsdata
 	rcv_data = request.form['javascript_data']
 
 	#WRITE RECEIVE DATA IN A FILE
-	with open("data.txt", "w") as f:
-		f.write(rcv_data)
-	
+	#with open("data.txt", "w") as f:
+		#f.write(rcv_data)
 	jsdata = dict(json.loads(rcv_data))
+
+	draw.draw_pcb(jsdata, [], [], 15)
 	#print(jsdata["bom"])
 	return "200"
 
 @app.route('/postnet', methods = ['POST'])
 def get_net_data():
+	global jsdata
 	rcv_data = request.form['javascript_data']
-	print(rcv_data)
+	#print(rcv_data)
+	draw.draw_pcb(jsdata, [rcv_data], [], 15)
 	return "200"
 
 if __name__ == "__main__":
