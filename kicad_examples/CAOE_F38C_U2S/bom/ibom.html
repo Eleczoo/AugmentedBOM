@@ -1884,7 +1884,7 @@ function drawFootprints(canvas, layer, scalefactor, highlight) {
     padHole: style.getPropertyValue('--pad-hole-color'),
     outline: style.getPropertyValue('--pin1-outline-color'),
   }
-
+  var fprints = [];
   for (var i = 0; i < pcbdata.footprints.length; i++) {
     var mod = pcbdata.footprints[i];
     var outline = settings.renderDnpOutline && pcbdata.bom.skipped.includes(i);
@@ -1903,9 +1903,15 @@ function drawFootprints(canvas, layer, scalefactor, highlight) {
       }
     }
     if( h || d || !highlight) {
+      fprints.push(mod.ref)
       drawFootprint(ctx, layer, scalefactor, mod, colors, highlight, outline);
     }
   }
+
+  // console.log(fprints)
+  // $.post( "http://127.0.0.1:5000/postbounding", {
+  //     javascript_data: JSON.stringify(fprints)
+  // });
 }
 
 function drawBgLayer(layername, canvas, layer, scalefactor, edgeColor, polygonColor, textColor) {

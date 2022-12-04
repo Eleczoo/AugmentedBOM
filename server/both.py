@@ -74,6 +74,15 @@ def get_net_data():
 	flag.flag_redraw = True
 	return "200"
 
+# @app.route('/postbounding', methods = ['POST'])
+# def get_bounding_data():
+# 	global jsdata
+# 	rcv_data = request.form['javascript_data']
+# 	# print(rcv_data)
+# 	draw.draw_pcb(jsdata, [], [rcv_data], 15)
+# 	flag.flag_redraw = True
+# 	return "200"
+
 if __name__ == "__main__":
 	app.run()
 

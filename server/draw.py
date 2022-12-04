@@ -151,10 +151,10 @@ def draw_bounding_box(pcb_data, canvas, ratio, comp_list):
 		start = rotate(pos, start, angle)
 		stop = rotate(pos, stop, angle)
 		
-		cv.line(canvas, start, p1, (0, 255, 0))
-		cv.line(canvas, start, p2, (0, 255, 0))
-		cv.line(canvas, stop, p1, (0, 255, 0))
-		cv.line(canvas, stop, p2, (0, 255, 0))
+		cv.line(canvas, start, p1, (255, 255, 255), 2)
+		cv.line(canvas, start, p2, (255, 255, 255), 2)
+		cv.line(canvas, stop, p1, (255, 255, 255), 2)
+		cv.line(canvas, stop, p2, (255, 255, 255), 2)
 
 def draw_pads(pcb_data, canvas, ratio, comp_list):
 	# Get base offset
@@ -173,7 +173,7 @@ def draw_pads(pcb_data, canvas, ratio, comp_list):
 			size[1] = int(size[1] * ratio / 2)
 			
 			if p["shape"] == "circle" or p["shape"] == "oval":
-				cv.circle(canvas, pos, int(size[0] / 1.5), (0, 255, 0))
+				cv.circle(canvas, pos, int(size[0] / 1.5), (255, 255, 255), 2)
 			elif p["shape"] == "rect" or p["shape"] == "roundrect":
 				start = (int(pos[0] - size[0] / 2), int(pos[1] - size[1] / 2))
 				stop = (int(pos[0] + size[0] / 2), int(pos[1] + size[1] / 2))
@@ -182,10 +182,10 @@ def draw_pads(pcb_data, canvas, ratio, comp_list):
 				p2 = rotate(pos, (stop[0], start[1]), angle)
 				start = rotate(pos, start, angle)
 				stop = rotate(pos, stop, angle)
-				cv.line(canvas, start, p1, (0, 255, 0))
-				cv.line(canvas, start, p2, (0, 255, 0))
-				cv.line(canvas, stop, p1, (0, 255, 0))
-				cv.line(canvas, stop, p2, (0, 255, 0))
+				cv.line(canvas, start, p1, (255, 255, 255), 2)
+				cv.line(canvas, start, p2, (255, 255, 255), 2)
+				cv.line(canvas, stop, p1, (255, 255, 255), 2)
+				cv.line(canvas, stop, p2, (255, 255, 255), 2)
 				
 
 
