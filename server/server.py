@@ -22,7 +22,7 @@ def get_post_data():
 	return "200"
 
 @app.route('/postnet', methods = ['POST'])
-def get_post_data():
+def get_net_data():
 	rcv_data = request.form['javascript_data']
 	print(rcv_data)
 	return "200"
