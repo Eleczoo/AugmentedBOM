@@ -5,40 +5,39 @@ $.post( "http://10.177.243.170:5000/postmethod", {
     javascript_data: JSON.stringify(pcbdata)
 });
 
-
-
 function createCheckboxChangeHandler(checkbox, references, row) {
-    return function () {
-  
-      if (checkbox == "Sourced")
-      {
-        if (row.cells[1].lastChild.checked)
-        {
-          refs = ["BOX", "ADD"];
-        }
-        else
-        {
-          refs = ["BOX", "DEL"]
-        }
-        references.forEach(element => {
-          refs.push(element[0])
-        });
-        
-        $.post( "http://127.0.0.1:5000/postdraw", {
-        javascript_data: JSON.stringify(refs)
-      });
-      }
-  
-        refsSet = getStoredCheckboxRefs(checkbox);
-        
+	return function ()
+	{
 
-clearHighlightedFootprints();
-highlightedNet = net;
-var arr = ["NET", "ADD", net];
-$.post( "http://127.0.0.1:5000/postdraw", {
-    javascript_data: JSON.stringify(arr)
-});
-        drawHighlights();
+		if (checkbox == "Sourced")
+		{
+			if (row.cells[1].lastChild.checked)
+			{
+				refs = ["BOX", "ADD"];
+			}
+			else
+			{
+				refs = ["BOX", "DEL"]
+			}
+			references.forEach(element =>{
+				refs.push(element[0])
+			});
+        
+			$.post("http://127.0.0.1:5000/postdraw", {
+				javascript_data: JSON.stringify(refs)
+			});
+		}
+
+		refsSet = getStoredCheckboxRefs(checkbox);
+
+	clearHighlightedFootprints();
+	highlightedNet = net;
+	var arr = ["NET", "ADD", net];
+	$.post( "http://127.0.0.1:5000/postdraw", {
+		javascript_data: JSON.stringify(arr)
+	});
+			drawHighlights();
+
 
 
 
@@ -92,5 +91,4 @@ function redrawCanvas(layerdict) {
         render_Iframe(layerdict);
 
     }
-
-}
+  }

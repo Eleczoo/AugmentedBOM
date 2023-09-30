@@ -1,9 +1,9 @@
 
-# eleczoo - 69eleczoo69
+# ID - PASSWORD : eleczoo - 69eleczoo69
 
 import cv2
 
-def get_feed(username ="eleczoo", password="69eleczoo69", ip="10.177.243.195", port="8080"):
+def get_feed(username ="eleczoo", password="69eleczoo69", ip="192.168.1.106", port="8080"):
 	"""
 	Get the video feed
 	args: 
@@ -25,5 +25,5 @@ def show_feed(feed, title="Title", ):
 	cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-	feed = get_feed(ip="192.168.59.242")
+	feed = get_feed(ip="192.168.1.106")
 	show_feed(feed)

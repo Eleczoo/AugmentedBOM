@@ -1,3 +1,5 @@
+
+
 import json
 import numpy as np
 import cv2 as cv
@@ -5,11 +7,27 @@ import math
 import copy
 
 def get_json_file(filename):
+	"""
+	Read a json file and return it as a dictionary
+
+	args :
+		- filename : filename of the json file
+	"""
+
 	with open(filename, "r") as f:
 		json_file = f.read()
 	return dict(json.loads(json_file))
 
 def rotate(origin, point, angle):
+	"""
+	Compute the rotation of a point around an origin
+
+	args :
+		- origin : x and y value of the origin point
+		- point  : x and y value of the point
+		- angle  : angle of rotation
+	"""
+
 	angle = np.deg2rad(angle)
 	ox, oy = origin
 	px, py = point
@@ -19,6 +37,13 @@ def rotate(origin, point, angle):
 	return int(qx), int(qy)
 
 def check_if_th(dico):
+	"""
+	Check if there is a PTH component in the json dictionnary
+
+	args :
+		- dico : json dictionnary
+	"""
+
 	if dico["pads"] == []:
 		return True
 	
@@ -28,6 +53,17 @@ def check_if_th(dico):
 	return False
 
 def draw_pcb(dico, net_list, comp_list, ratio = 15):
+	"""
+	Draw the pcb edges, nets, components pads and bounding box
+
+	args :
+		- dico		: json dictionnary
+		- net_list	: list of nets
+		- comp_list	: list of components
+		- ratio		: ratio to scale the image
+
+	"""
+
 	pcb_data = copy.deepcopy(dico)
 	# Create a black background
 	w_x = int(pcb_data["edges_bbox"]["maxx"] * ratio) - int(pcb_data["edges_bbox"]["minx"] * ratio)
@@ -42,10 +78,10 @@ def draw_pcb(dico, net_list, comp_list, ratio = 15):
 	# Draw PCB net
 	draw_net(pcb_data, img, ratio, net_list)
 
-	# Draw Componants bounding box
+	# Draw Components bounding box
 	draw_bounding_box(pcb_data, img, ratio, comp_list)
 
-	# Draw Componants pads
+	# Draw Components pads
 	draw_pads(pcb_data, img, ratio, comp_list)
 
 	cv.imwrite("circuit_draw.png", img)
@@ -54,27 +90,45 @@ def draw_pcb(dico, net_list, comp_list, ratio = 15):
 	#cv.waitKey(0)
 
 def scale(pos, ratio):
+	"""
+	Scale a position by a ratio
+
+	args :
+		- pos   : position to scale
+		- ratio : ratio to scale
+	"""
+
 	for i in range (len(pos)):
 		pos[i] *= ratio
 	return pos
 
 def draw_edge_cuts(pcb_data , canvas, ratio = 1, color=(255, 255, 255)):
-	
+	"""
+	Draw the pcb edge cuts
+
+	args :
+		- pcb_data : json dictionnary with the PCB data
+		- canvas   : Canvas object to draw on
+		- ratio    : ratio to scale the image
+		- color    : color of the edge cuts
+	"""
+
 	# Get base offset
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
 
-
 	for edge in pcb_data["edges"]:
 		#print(edge)
 		start = edge["start"]
-		start[0] -= minx;start[1] -= miny
+		start[0] -= minx
+		start[1] -= miny
 		start = scale(start, ratio)
 		start = list(map(int,start))
 
 		if edge["type"] == "segment":
 			stop = edge["end"]
-			stop[0] -= minx;stop[1] -= miny
+			stop[0] -= minx
+			stop[1] -= miny
 			stop = scale(stop, ratio)
 			stop = list(map(int,stop))
 			cv.line(canvas, start, stop, color)
@@ -85,6 +139,16 @@ def draw_edge_cuts(pcb_data , canvas, ratio = 1, color=(255, 255, 255)):
 			cv.ellipse(canvas, start, (radius, radius), 0, start_angle, end_angle, color)
 
 def draw_net(pcb_data, canvas, ratio, net_list):
+	"""
+	Draw the nets of the PCB
+
+	args :
+		- pcb_data : json dictionnary with the PCB data
+		- canvas   : Canvas object to draw on
+		- ratio    : ratio to scale the image
+		- net_list : list of nets to draw
+	"""
+
 	# Get base offset
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
@@ -106,12 +170,14 @@ def draw_net(pcb_data, canvas, ratio, net_list):
 				continue
 			
 			start = track["start"]
-			start[0] -= minx;start[1] -= miny
+			start[0] -= minx
+			start[1] -= miny
 			start = scale(start, ratio)
 			start = list(map(int,start))
 
 			stop = track["end"]
-			stop[0] -= minx;stop[1] -= miny
+			stop[0] -= minx
+			stop[1] -= miny
 			stop = scale(stop, ratio)
 			stop = list(map(int,stop))
 
@@ -125,6 +191,16 @@ def draw_net(pcb_data, canvas, ratio, net_list):
 			cv.line(canvas, start, stop, color, int(width))
 
 def draw_bounding_box(pcb_data, canvas, ratio, comp_list):
+	"""
+	Draw the bounding box of the components
+
+	args :
+		- pcb_data : json dictionnary with the PCB data
+		- canvas   : Canvas object to draw on
+		- ratio    : ratio to scale the image
+		- comp_list: list of components to draw the bounding box of
+	"""
+
 	# Get base offset
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
@@ -158,6 +234,16 @@ def draw_bounding_box(pcb_data, canvas, ratio, comp_list):
 		cv.line(canvas, stop, p2, color, 2)
 
 def draw_pads(pcb_data, canvas, ratio, comp_list):
+	"""
+	Draw the pads of the components
+
+	args :
+		- pcb_data : json dictionnary with the PCB data
+		- canvas   : Canvas object to draw on
+		- ratio    : ratio to scale the image
+		- comp_list: list of components to draw the pads of
+	"""
+
 	# Get base offset
 	minx = pcb_data["edges_bbox"]["minx"]
 	miny = pcb_data["edges_bbox"]["miny"]
