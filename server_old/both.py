@@ -1,5 +1,5 @@
 from get_cam import *
-from ar import generator, get_front_pcb_image
+from ar import generator, get_screenshot
 from flask import Flask, request
 from flask import Response
 from flask_cors import CORS
@@ -10,23 +10,23 @@ import os
 import flag
 
 
-# def frame_getter(feed):  
-# 	import time
-# 	import cv2
-# 	# source : https://stackoverflow.com/questions/72138213/serving-local-webcam-video-stream-to-web-with-multipart-mixed-replace-http-res
-# 	while(True):
-# 		ret, frame = feed.read()
-# 		if not ret:
-# 			time.sleep(0.5)
-# 			continue
-# 		else:
-# 			# encode frame to jpg
-# 			ret, buffer = cv2.imencode('.jpg', frame)
-# 			frame = buffer.tobytes()
-# 			# Yield returns a generator, to allow getting things live
-# 			yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+def frame_getter(feed):  
+	import time
+	import cv2
+	# source : https://stackoverflow.com/questions/72138213/serving-local-webcam-video-stream-to-web-with-multipart-mixed-replace-http-res
+	while(True):
+		ret, frame = feed.read()
+		if not ret:
+			time.sleep(0.5)
+			continue
+		else:
+			# encode frame to jpg
+			ret, buffer = cv2.imencode('.jpg', frame)
+			frame = buffer.tobytes()
+			# Yield returns a generator, to allow getting things live
+			yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-# feed = get_feed_camera()
+feed = get_feed_camera()
 app = Flask(__name__)
 CORS(app)
 jsdata = dict()
@@ -36,9 +36,8 @@ bounding_list = []
 def live():
 
 	try:
-		feed = get_feed_camera()
 		if not os.path.exists("front.png"):
-			get_front_pcb_image(feed, "front.png")
+			get_screenshot("front.png")
 		frontTargetImg = cv2.imread("front.png")
 
 		orb = cv2.ORB_create(1000)
@@ -47,9 +46,10 @@ def live():
 		# FRONT
 		kpfront, desfront = orb.detectAndCompute(frontTargetImg, None)
 
+		feed = get_feed_camera()
 		return Response(generator(feed, kpfront, desfront, bf, orb, frontTargetImg.shape, flag.flag_redraw), mimetype='multipart/x-mixed-replace; boundary=frame')
 	except Exception as e:
-		print(f"Exception /live : {e}")
+		print(f"Exception : {e}")
 
 @app.route('/postmethod', methods = ['POST'])
 def get_post_data():

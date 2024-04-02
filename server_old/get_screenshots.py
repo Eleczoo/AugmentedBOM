@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream:server/get_screenshots.py
 from get_cam import get_feed, show_feed
+=======
+from get_cam import get_feed_camera
+>>>>>>> Stashed changes:server_old/get_screenshots.py
 import numpy as np
 import cv2
 
@@ -88,6 +92,17 @@ def get_cropped_pcb_from_frame(frame, corners):
 		np.array: Cropped image containing only the pcb
 	"""
 
+<<<<<<< Updated upstream:server/get_screenshots.py
+=======
+def get_screenshot(filename):
+	global frame
+	feed = get_feed_camera()
+	# feed = cv2.VideoCapture("/dev/video4")
+	cv2.namedWindow("image")
+	cv2.setMouseCallback("image", draw_circle_on_click)
+	
+	_, frame = feed.read()
+>>>>>>> Stashed changes:server_old/get_screenshots.py
 	original_frame = frame.copy()
 
 	cv2.imwrite("COPY.png", frame)
