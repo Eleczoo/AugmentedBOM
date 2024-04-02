@@ -2,16 +2,18 @@ from flask import Flask, request
 from flask import Response
 from flask_cors import CORS
 
-from ar import stacked_feed_generator, get_screenshot, flag_redraw
-from get_cam import get_feed, show_feed
+from ar import stacked_feed_generator, get_front_pcb_image, flag_redraw
+from get_cam import get_feed_camera, get_feed_network, show_feed
 
 import cv2
 import json
 import draw
 import os
 
-from __main__ import app
+# from __main__ import app
 
+app = Flask(__name__)
+CORS(app)
 
 # Global variable containing the data fetched once
 # Used in multiple routes, Global to only fetch once  
@@ -24,12 +26,13 @@ bounding_boxes = []
 @app.route("/live", methods = ['GET'])
 def live():
 	try:
+		feed = get_feed_camera()
 
 		# At start, the front image does not exist
 		# So we're gonna take a screenshot of the PCB
 		# in order to use it for feature detection
 		if not os.path.exists("front.png"):
-			get_screenshot("front.png")
+			get_front_pcb_image(feed, "front.png")
 
 		front_target_image = cv2.imread("front.png")
 
@@ -40,7 +43,6 @@ def live():
 		# Detect the features of the front image
 		kpfront, desfront = orb.detectAndCompute(front_target_image, None)
 
-		feed = get_feed()
 
 		# Return a generator of the base video feed stacked with
 		# warped drawn traces and bouding boxes 
@@ -127,4 +129,7 @@ def get_drawing_data():
 	draw.draw_pcb(js_data, netlist, bounding_boxes, 15)
 	flag_redraw = True
 	return "200"
+
+if __name__ == "__main__":
+	app.run()
 

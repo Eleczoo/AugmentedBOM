@@ -1,8 +1,14 @@
+# Augmented Reality module 
+# Date : refactored 02/04/2024
+# This contains the code to warp and align the traces and bounding boxes with the PCB
+
 from get_cam import *
 import numpy as np
 import os.path
 import cv2
-import flag
+
+# Global variable telling if the traces and bounding boxes need to be redrawn
+flag_redraw = True
 
 def get_homography_matrix(kp1, kp2, good):
 	srcPts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1 ,2)
@@ -116,8 +122,23 @@ def get_front_pcb_image(feed, filename: str):
 	cv2.imwrite(filename, clean)
 
 
-def generator(feed, kpfront, desfront, bf, orb, targetShape, flag_redraw, NB_FEATURES=250):
-	hF, wF = targetShape[:2]
+def stacked_feed_generator(feed, keypoints_front, description_front, bf, orb, targetShape, flag_redraw, NB_FEATURES=250):
+	"""
+	Generator yields the video feed stacked with the warped traces and bounding boxes
+	Yield allows us to get the data live, unlike an iterator, it does not store the incoming data
+	but generates it on the fly
+	args : 
+		- feed 				 : the original video feed
+		- keypoints_front 	 : the keypoints of the front image (distinct identifiable features even with different colors)
+		- description_front  : the descriptors of the front image
+		- bruteforce_matcher : the bruteforce matcher
+		- orb 				 : the orb detector (feature detector)
+		- target_shape 		 : the shape of the target image 
+		- flag_redraw 		 : a flag that indicates if the traces and bounding boxes need to be redrawn
+		- NB_FEATURES 		 : the number of features to use for the homography matrix
+	"""
+
+	height_front, width_front = targetShape[:2]
 	running = True
 
 	while running:
@@ -134,13 +155,8 @@ def generator(feed, kpfront, desfront, bf, orb, targetShape, flag_redraw, NB_FEA
 		frame = frame[60:-60,]
 
 		kp2, des2 = orb.detectAndCompute(frame, None)
-	
-		#print(f"{type(frame) = }")
-		#print(f"{type(description_front) = }")
-		#print(f"{type(kp2) = }")
-		#print(f"{type(des2) = }")
 
-		matches_front = bruteforce_matcher.match(description_front, des2)
+		matches_front = bf.match(description_front, des2)
 		matches_front = sorted(matches_front, key = lambda x:x.distance)
 
 		srcpts = np.float32([keypoints_front[p.queryIdx].pt for p in matches_front[:NB_FEATURES]]).reshape(-1, 1, 2)
@@ -183,7 +199,7 @@ if __name__ == "__main__":
 	# backTargetImg = cv2.imread("back.png")
 
 	circuit = cv2.imread("circuit_draw.png")
-	circuit = cv2.resize(circuit, (wF, hF))
+	circuit = cv2.resize(circuit, (width_front, height_front))
 
 	orb = cv2.ORB_create(1000)
 	bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)

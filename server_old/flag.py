@@ -1,2 +1,0 @@
-
-flag_redraw = True
